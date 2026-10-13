@@ -8,6 +8,20 @@
   <img src="docs/images/epaper/off-work.png" width="260" alt="퇴근">
 </p>
 
+## 실물
+
+<p align="center">
+  <img src="docs/images/photos/door-overview.jpg" width="300" alt="연구실 문에 붙인 모습">
+  <img src="docs/images/photos/mounted-closeup.jpg" width="300" alt="문패 확대">
+</p>
+<p align="center">
+  <img src="docs/images/photos/mounted-front.jpg" width="604" alt="정면">
+</p>
+
+철문 가운데 높이에 네오디뮴 자석으로 붙였습니다. 케이스는 3D 프린트(PLA)이고, 배터리와 보드가 뒤에 들어갑니다. 부품, 결선, 케이스는 [hardware](hardware)에 있습니다.
+
+## 웹 UI
+
 <p align="center"><img src="docs/images/web-ui.png" width="820" alt="웹 UI"></p>
 
 ## 구성
@@ -41,7 +55,7 @@ flowchart LR
 | [`hardware/`](hardware) | **부품 목록, 결선, 3D 프린터 케이스(SCAD/STL)**, e-paper 동작 확인 스케치 |
 | [`docs/`](docs) | 전력·배터리 기록, 그림, 원시 배터리 로그, 초기 설계 문서 |
 
-## 웹 UI
+### 기능
 
 - **자동 상태 연결**: 상태마다 연결된 그림이 보입니다. 칸을 누르면 그 상태로 바로 전송됩니다.
 - **그림**:
