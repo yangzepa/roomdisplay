@@ -1,0 +1,20 @@
+# 비밀값·환경
+firmware/include/secrets.h
+server/.env
+.env
+
+# 빌드 산출물
+firmware/.pio/
+firmware/sdkconfig.*
+firmware/sdkconfig *
+!firmware/sdkconfig.defaults
+firmware/build_lp.log
+__pycache__/
+
+# 런타임 데이터(그림·상태·로그는 서버에만)
+server/data/
+
+# 기타
+.omc/
+.DS_Store
+preview_test.png

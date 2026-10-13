@@ -1,0 +1,32 @@
+[
+    {
+        "t": 1791346374,
+        "type": "battery",
+        "text": "기록 시작. 기존 셀(라벨 2.07Wh≈560mAh, 실제 약 200mAh로 추정). 펌웨어 tdisplay(Arduino 단독, 라이트슬립 없음)"
+    },
+    {
+        "t": 1791358577,
+        "type": "firmware",
+        "text": "tdisplay_lp 적용(arduino+espidf 자동 라이트슬립, CPU 80/40MHz, WiFi MAX_MODEM listen 10, 롱폴링 240초). 방전 약 219→18mV/h"
+    },
+    {
+        "t": 1791421130,
+        "type": "note",
+        "text": "기존 셀 완충 후 방전 시작 → 10/10 02:56 방전까지 41.0시간(기존 셀 기준값)"
+    },
+    {
+        "t": 1791786157,
+        "type": "battery",
+        "text": "3500mAh 셀로 교체. 장착 전 멀티미터 3.90V(무부하)"
+    },
+    {
+        "t": 1791787530,
+        "type": "calib",
+        "text": "전압 게인 0.9888(멀티미터 3.90V 대 ADC 3944mV), 만충 기준 4.098V(10/8 완충 직후 값 환산). 이전 '만충=4.18V' 가정 폐기"
+    },
+    {
+        "t": 1791874323.0,
+        "type": "firmware",
+        "text": "롱폴링 타임아웃 버그 수정(HTTPClient setTimeout uint16 오버플로로 260s가 63s로 잘리던 문제, WAIT_SEC 55로 변경), 자가 복구(연속 3회 실패 시 WiFi 재연결, 20분 무응답 시 재부팅), 진단값 rr/nf/ds 보고"
+    }
+]

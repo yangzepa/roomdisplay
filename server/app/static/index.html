@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>연구실 문패</title>
+<style>
+:root{
+  --bg:#f3f1ec; --card:#fffdf8; --ink:#1b1b1b; --muted:#76736c; --line:#ddd8cc;
+  --red:#c8241f; --ok:#2f7d4f; --warn:#c07a12; --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#171614; --card:#22201d; --ink:#ece8df; --muted:#9a958b; --line:#37342e; --shadow:none;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 24px;border-bottom:1px solid var(--line)}
+h1{font-size:19px;margin:0;letter-spacing:-.01em}
+h2{font-size:14px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:13px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.on{background:var(--ok)}
+.bat{display:inline-block;width:22px;height:11px;border:1.5px solid currentColor;border-radius:2px;position:relative;margin-right:2px}
+.bat::after{content:"";position:absolute;right:-4px;top:2.5px;width:2px;height:4px;background:currentColor;border-radius:1px}
+.bat i{position:absolute;left:1px;top:1px;bottom:1px;background:currentColor;border-radius:1px}
+main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:24px;padding:24px;max-width:1280px;margin:0 auto}
+@media (max-width:860px){main{grid-template-columns:1fr;padding:16px}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.sticky{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:16px}
+@media (max-width:860px){.sticky{position:static}}
+.epd{width:100%;aspect-ratio:4/3;border-radius:6px;background:#fff;border:8px solid #2a2a2a;display:block}
+.meta{color:var(--muted);font-size:13px;margin-top:8px;display:flex;justify-content:space-between;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tile{position:relative;border:2px solid transparent;border-radius:10px;background:var(--bg);padding:6px;cursor:pointer;transition:transform .08s,border-color .15s}
+.tile:hover{transform:translateY(-1px);border-color:var(--line)}
+.tile.on{border-color:var(--red)}
+.tile img{width:100%;aspect-ratio:4/3;display:block;border-radius:4px;background:#fff}
+.tile .cap{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 2px 0;font-size:13px}
+.tile .cap span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile .badge{position:absolute;bottom:34px;right:12px;background:var(--red);color:#fff;font-size:11px;padding:2px 7px;border-radius:999px;display:none}
+.tile.on .badge{display:block}
+.tile.sending{opacity:.55;pointer-events:none}
+.tools{display:flex;gap:4px}
+.tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;font-size:11px;padding:2px 6px;cursor:pointer}
+.tools button:hover{border-color:var(--ink)}
+.tools button.del:hover{border-color:var(--red);color:var(--red)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.row label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;width:150px}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted);margin-bottom:12px;cursor:pointer}
+.drop.over{border-color:var(--red);color:var(--ink)}
+.opts{display:flex;gap:14px;justify-content:center;margin-top:8px;font-size:13px}
+section+section{margin-top:16px}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}
+.hint{color:var(--muted);font-size:12px;margin:-4px 0 10px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.slot{border:2px solid transparent;border-radius:10px;background:var(--bg);padding:6px;cursor:pointer;text-align:center;font-size:13px}
+.slot:hover{border-color:var(--line)}.slot.on{border-color:var(--red)}
+.slot .thumb{aspect-ratio:4/3;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#999;font-size:11px;border:1px dashed var(--line)}
+.slot .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.slot b{display:block;margin-top:5px}
+.slot.empty .thumb{background:transparent}
+.tile .state{position:absolute;top:12px;left:12px;background:var(--ink);color:var(--bg);font-size:11px;padding:2px 7px;border-radius:999px}
+.tools select{font:inherit;font-size:11px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 2px}
+.tile .cap .name{cursor:text}.tile .cap .name:hover{text-decoration:underline dotted}
+h2 small{font-weight:400}
+.restore{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap}
+.restore button{border:1px dashed var(--line);background:none;color:var(--muted);border-radius:999px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer}
+.restore button:hover{color:var(--ink);border-color:var(--ink)}
+.tile .kind{font-size:11px;color:var(--muted);margin-right:4px}
+.tile.dragging{opacity:.35}
+.tile.drop-before{box-shadow:-4px 0 0 var(--red)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+svg.chart{width:100%;height:120px;display:block}
+.chart-axis{fill:var(--muted);font-size:10px}
+.charge{margin-bottom:12px}
+.events{margin-top:10px;font-size:12px;color:var(--muted)}
+.events summary{cursor:pointer}
+.events ol{list-style:none;padding:0;margin:8px 0;display:flex;flex-direction:column;gap:5px}
+.events li{display:flex;gap:8px}.events li b{color:var(--ink);font-weight:600;white-space:nowrap}
+.events li time{white-space:nowrap;font-variant-numeric:tabular-nums}
+.events form{display:flex;gap:6px}.events select,.events button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.events form input{flex:1;width:auto}
+.charge .top{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-bottom:6px}
+.charge .top b{font-size:22px}
+.charge .bar{height:10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.charge .bar i{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .4s;
+  background-image:linear-gradient(45deg,rgba(255,255,255,.18) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.18) 50%,rgba(255,255,255,.18) 75%,transparent 75%);background-size:14px 14px;animation:stripes 1s linear infinite}
+@keyframes stripes{to{background-position:14px 0}}
+.charge .sub{color:var(--muted);font-size:12px;margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>연구실 문패</h1>
+  <div class="chips">
+    <span class="chip" id="c-online"><span class="dot"></span>문패 확인 중</span>
+    <span class="chip" id="c-bat">배터리 —</span>
+    <span class="chip" id="c-rssi">WiFi —</span>
+  </div>
+</header>
+
+<main>
+  <div class="sticky">
+    <div class="panel">
+      <h2>지금 문패</h2>
+      <img class="epd" id="cur" alt="현재 문패 화면">
+      <div class="meta"><span id="cur-what">—</span><span id="cur-time"></span></div>
+    </div>
+    <div class="panel">
+      <h2>배터리 (최근 7일)</h2>
+      <div class="charge" id="charge" hidden>
+        <div class="top"><span>충전 중 <b id="ch-pct">—</b></span><span id="ch-left"></span></div>
+        <div class="bar"><i id="ch-bar" style="width:0"></i></div>
+        <div class="sub" id="ch-sub"></div>
+      </div>
+      <div id="chart"></div>
+      <details class="events"><summary>기록 메모 <span id="ev-count"></span></summary>
+        <ol id="events"></ol>
+        <form id="ev-form"><select id="ev-type"><option value="note">메모</option><option value="battery">배터리 교체</option><option value="firmware">펌웨어</option><option value="calib">보정</option></select>
+          <input type="text" id="ev-text" placeholder="예: 멀티미터 4.08V" maxlength="300"><button>추가</button></form>
+      </details>
+      <div class="meta"><span id="bat-note">기록이 쌓이면 표시됩니다 (5분 간격)</span></div>
+    </div>
+  </div>
+
+  <div>
+    <section class="panel">
+      <h2>자동 상태 연결</h2>
+      <div class="hint">자동화(캘린더·CCTV)가 상태를 바꾸면 여기 연결된 그림이 문패에 뜹니다. 연결은 아래 그림 카드의 상태 메뉴에서 합니다. 칸을 누르면 그 상태로 바로 전송합니다.</div>
+      <div class="slots" id="slots"></div>
+    </section>
+
+    <section class="panel">
+      <h2>그림 <small id="count"></small></h2>
+      <div class="drop" id="drop">
+        이미지를 끌어다 놓거나, 클릭해서 고르거나, <b>⌘V</b>로 붙여넣기
+        <div class="opts" onclick="event.stopPropagation()">
+          <label><input type="radio" name="fit" value="contain" checked> 전체 맞춤</label>
+          <label><input type="radio" name="fit" value="cover"> 꽉 채움(잘림)</label>
+          <label><input type="checkbox" id="dither" checked> 디더링</label>
+          <label><input type="checkbox" id="autoshow"> 올리자마자 전송</label>
+        </div>
+        <input type="file" id="file" accept="image/*" multiple hidden>
+      </div>
+      <div class="hint">클릭하면 문패로 전송 · 이름을 누르면 이름 변경 · 끌어서 순서 변경</div>
+      <div class="grid" id="pool"></div>
+    </section>
+  </div>
+</main>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+let cur = null, pool = [], statuses = [];
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); }
+async function api(path, opts={}){ const r = await fetch(path, opts); if(!r.ok) throw new Error((await r.json().catch(()=>({detail:r.statusText}))).detail); return r.json(); }
+const post = (path, body) => api(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+const ago = t => { if(!t) return '없음'; const s=Math.round(Date.now()/1000-t); return s<60?`${s}초 전`:s<3600?`${Math.round(s/60)}분 전`:`${Math.round(s/3600)}시간 전`; };
+const esc = t => String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const imgSrc = m => `/api/images/${m.id}/preview.png?${m.fit}${m.dither}`;
+let dragKey=null;
+
+// 지금 문패에 실제로 떠 있는 그림 id (상태로 표시 중이면 연결된 그림)
+const shownId = () => { const c=cur&&cur.current; return !c ? null : c.kind==='image' ? c.id : c.image||null; };
+const stateLabel = k => (statuses.find(s=>s.key===k)||{}).label || k;
+
+function renderSlots(){
+  const c=cur&&cur.current;
+  $('#slots').innerHTML = statuses.map(s=>{
+    const m = pool.find(i=>i.id===s.image);
+    const on = c && c.kind==='status' && c.state===s.key;
+    return `<div class="slot ${m?'':'empty'} ${on?'on':''}" data-k="${s.key}" title="${m?esc(m.name):'연결된 그림 없음 — 글자 화면으로 표시'}">
+      <div class="thumb">${m?`<img src="${imgSrc(m)}" loading="lazy">`:'미지정<br>(글자 화면)'}</div><b>${esc(s.label)}</b></div>`;
+  }).join('');
+  $('#slots').querySelectorAll('.slot').forEach(el=>el.onclick=()=>send(el,{kind:'status',state:el.dataset.k},stateLabel(el.dataset.k)));
+}
+
+function renderPool(){
+  const g=$('#pool'); g.innerHTML='';
+  $('#count').textContent = `· ${pool.length}개`;
+  const sid = shownId();
+  const opts = k => `<option value="">상태 없음</option>` + statuses.map(s=>`<option value="${s.key}" ${k===s.key?'selected':''}>${s.label}</option>`).join('');
+  for(const it of pool){
+    const el=document.createElement('div'); el.className='tile'+(it.id===sid?' on':''); el.draggable=true; el.dataset.key=it.key;
+    el.innerHTML=`<span class="badge">표시 중</span>${it.state?`<span class="state">${esc(stateLabel(it.state))}</span>`:''}
+      <img loading="lazy" draggable="false" src="${imgSrc(it)}">
+      <div class="cap"><span class="name" data-a="rename" title="이름 변경: ${esc(it.name)}">${esc(it.name)}</span>
+      <span class="tools"><select data-a="state" title="자동 상태 연결">${opts(it.state)}</select>
+        <button data-a="fit" title="맞춤/채움 전환">${it.fit==='cover'?'채움':'맞춤'}</button><button data-a="dither" title="디더링 전환">${it.dither?'디더':'단색'}</button>
+        <button data-a="del" class="del" title="삭제">✕</button></span></div>`;
+    const sel=el.querySelector('select');
+    sel.onclick=e=>e.stopPropagation();
+    sel.onchange=async e=>{ e.stopPropagation();
+      try{ await post(`/api/images/${it.id}/meta`,{state:sel.value}); toast(sel.value?`'${stateLabel(sel.value)}' 상태 = '${it.name}'`:'상태 연결 해제'); await reloadAll(); }
+      catch(err){ toast('실패: '+err.message); } };
+    el.onclick=e=>{
+      const a=e.target.dataset && e.target.dataset.a;
+      if(a==='rename'){ e.stopPropagation(); const n=prompt('그림 이름', it.name); if(n&&n.trim()&&n!==it.name) post(`/api/images/${it.id}/meta`,{name:n}).then(reloadAll); return; }
+      if(a==='del'){ e.stopPropagation(); if(confirm(`'${it.name}' 그림을 삭제할까요?`)) api(`/api/pool/${encodeURIComponent(it.key)}`,{method:'DELETE'}).then(reloadAll); return; }
+      if(a==='fit'||a==='dither'){ e.stopPropagation();
+        const body={fit:it.fit, dither:it.dither}; if(a==='fit') body.fit=it.fit==='cover'?'contain':'cover'; else body.dither=!it.dither;
+        post(`/api/images/${it.id}/reconvert`,body).then(reloadAll); return; }
+      send(el,{kind:'image',id:it.id},it.name);
+    };
+    el.addEventListener('dragstart',e=>{ dragKey=it.key; el.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',it.key); });
+    el.addEventListener('dragend',()=>{ dragKey=null; el.classList.remove('dragging'); g.querySelectorAll('.drop-before').forEach(x=>x.classList.remove('drop-before')); });
+    el.addEventListener('dragover',e=>{ if(!dragKey||dragKey===it.key) return; e.preventDefault(); g.querySelectorAll('.drop-before').forEach(x=>x.classList.remove('drop-before')); el.classList.add('drop-before'); });
+    el.addEventListener('drop',e=>{ if(!dragKey) return; e.preventDefault(); e.stopPropagation(); moveBefore(dragKey,it.key); });
+    g.appendChild(el);
+  }
+}
+
+async function moveBefore(src, dst){
+  const keys=pool.map(i=>i.key).filter(k=>k!==src); keys.splice(keys.indexOf(dst),0,src);
+  pool.sort((a,b)=>keys.indexOf(a.key)-keys.indexOf(b.key)); renderPool();
+  await post('/api/pool/order',{order:keys});
+}
+
+async function send(el, body, name){
+  el.classList.add('sending');
+  try{ const r = await post('/api/show', body); cur=r;
+       toast(r.refreshed===false ? `'${name}' — 이미 같은 그림이라 문패는 그대로` : `'${name}' 전송 — 문패 갱신에 약 15초`); paint(); }
+  catch(e){ toast('실패: '+e.message); }
+  el.classList.remove('sending');
+}
+
+let paintedSeq=null;
+function paint(){
+  if(cur.seq!==paintedSeq){ $('#cur').src='/api/current.png?'+cur.seq; paintedSeq=cur.seq; }
+  const c=cur.current, m=pool.find(i=>i.id===shownId());
+  $('#cur-what').textContent = c.kind==='status'
+    ? `상태: ${stateLabel(c.state)}${m?` · ${m.name}`:' · 글자 화면(연결된 그림 없음)'}`
+    : `그림: ${m?m.name:c.id}`;
+  $('#cur-time').textContent = new Date(cur.updated*1000).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  renderSlots(); renderPool();
+}
+
+// 바뀐 게 있을 때만 다시 그림(깜빡임 방지). 문패 기기와는 무관한 서버 조회.
+async function loadState(){
+  const s = await api('/api/state');
+  const changed = !cur || s.seq!==cur.seq || JSON.stringify(s.current)!==JSON.stringify(cur.current);
+  cur = s; if(changed) paint();
+}
+async function loadPool(){ pool = (await api('/api/pool')).items; }
+async function loadStatuses(){ statuses = await api('/api/statuses'); }
+async function reloadAll(){ await Promise.all([loadPool(), loadStatuses()]); cur = await api('/api/state'); paint(); }
+
+async function loadDevice(){
+  const d = await api('/api/device');
+  const on=$('#c-online');
+  on.innerHTML=`<span class="dot ${d.online?'on':''}"></span>${d.online?'문패 연결됨':'문패 오프라인'} · ${ago(d.seen)}`;
+  on.title = d.reset_reason!=null ? `부팅 원인: ${d.reset_reason} · 가동 ${d.uptime!=null?Math.round(d.uptime/3600)+'시간':'—'} · 통신 실패 누적 ${d.fails} · 마지막 WiFi 끊김 사유 ${d.disc_reason}` : '';
+  if(d.bat_mv){
+    const pct=d.bat_pct, col = d.usb?'var(--ok)': pct<15?'var(--red)': pct<35?'var(--warn)':'var(--ink)';
+    const ch=d.charge, shown = ch ? ch.pct : pct;
+    $('#c-bat').innerHTML=`<span class="bat" style="color:${col}"><i style="width:${Math.max(2,Math.min(100,shown))*0.17}px"></i></span>`
+      + (ch ? `충전 중 약 ${ch.pct}%` + (ch.minutes_left>0?` · ${fmtMin(ch.minutes_left)} 남음`:' · 완충 추정') : d.usb ? 'USB 전원' : `${pct}% · ${(d.bat_mv/1000).toFixed(2)}V`);
+  } else $('#c-bat').textContent='배터리 —';
+  $('#c-rssi').textContent = d.rssi!=null ? `WiFi ${d.rssi} dBm` : 'WiFi —';
+  const ch=d.charge;
+  $('#charge').hidden=!ch;
+  if(ch){
+    $('#ch-pct').textContent=`약 ${ch.pct}%`;
+    $('#ch-bar').style.width=ch.pct+'%';
+    $('#ch-left').textContent = ch.minutes_left>0 ? `완충까지 약 ${fmtMin(ch.minutes_left)}` : '완충 추정';
+    $('#ch-sub').textContent = `${fmtMin(ch.elapsed_min)}째 충전 · 시작 ${ch.pre_known?ch.start_pct+'%':'잔량 미상(0%로 가정)'} · 추정치(${ch.charge_ma}mA, ${ch.bat_mah}mAh 기준). 충전 중엔 실측 불가, 분리 후 실제 전압으로 확인됨`;
+  }
+  drawChart(d.history);
+  const calib = d.gain ? ` · 전압 보정 ×${d.gain.toFixed(3)} · 만충 기준 ${(d.full_mv/1000).toFixed(2)}V` : '';
+  const e=d.est;
+  const hrs = h => h<48 ? `${h}시간` : `${(h/24).toFixed(1)}일`;
+  const parts = [];
+  if(!d.usb && d.bat_mv) parts.push(`${(d.bat_mv/1000).toFixed(2)}V`);
+  if(!d.usb && d.hours_left_by_run!=null) parts.push(`남은 시간 약 ${hrs(d.hours_left_by_run)}`);
+  else if(!d.usb && e && e.hours_left!=null) parts.push(`남은 시간 약 ${hrs(e.hours_left)} (기울기 기준)`);
+  if(d.last_full) parts.push(`지난 완충 1회 ${hrs(d.last_full.hours)} 지속 (${new Date(d.last_full.start*1000).toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'})})`);
+  if(d.low) parts.unshift('⚠ 배터리 부족 — 문패에 경고 표시 중');
+  if(parts.length) $('#bat-note').textContent = parts.join(' · ');
+  if(calib) $('#bat-note').textContent += calib;
+}
+
+let events=[];
+const EVN={battery:'배터리 교체',firmware:'펌웨어',calib:'보정',note:'메모'};
+async function loadEvents(){
+  events = await api('/api/events');
+  $('#ev-count').textContent=`(${events.length})`;
+  $('#events').innerHTML = events.slice().reverse().map(e=>`<li><time>${new Date(e.t*1000).toLocaleString('ko-KR',{year:'2-digit',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</time><b>${EVN[e.type]||e.type}</b><span>${esc(e.text)}</span></li>`).join('');
+}
+$('#ev-form').onsubmit=async ev=>{ ev.preventDefault(); const text=$('#ev-text').value.trim(); if(!text) return;
+  await api('/api/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:$('#ev-type').value,text})});
+  $('#ev-text').value=''; await loadEvents(); loadDevice(); toast('기록 추가됨'); };
+
+function fmtMin(m){ return m<60 ? `${m}분` : `${Math.floor(m/60)}시간 ${m%60}분`; }
+
+function drawChart(h){
+  const box=$('#chart');
+  if(!h || h.length<2){ box.innerHTML=''; return; }
+  $("#bat-note").textContent = `${h.length}개 기록 · 초록 음영 = USB 충전 구간`;
+  const W=380,H=120,P={l:30,r:6,t:8,b:18};
+  const USB=4300, all=h; h=h.filter(r=>r[1]<USB);
+  if(h.length<2){ box.innerHTML=''; return; }
+  const t0=all[0][0], t1=all[all.length-1][0], vmin=3300, vmax=4300;
+  const x=t=>P.l+(W-P.l-P.r)*(t-t0)/Math.max(1,t1-t0), y=v=>P.t+(H-P.t-P.b)*(1-(v-vmin)/(vmax-vmin));
+  // USB 구간 사이로 선이 이어지지 않게 끊어서 그림
+  const segs=[]; let seg=[];
+  for(const r of all){ if(r[1]>=USB){ if(seg.length) segs.push(seg); seg=[]; } else seg.push(`${x(r[0]).toFixed(1)},${y(r[1]).toFixed(1)}`); }
+  if(seg.length) segs.push(seg);
+  const lines=segs.map(s=>`<polyline points="${s.join(' ')}" fill="none" stroke="var(--red)" stroke-width="1.8" vector-effect="non-scaling-stroke"/>`).join('');
+  const bands=[]; let bs=null;
+  all.forEach((r,i)=>{ if(r[1]>=USB){ if(bs===null) bs=r[0]; } else if(bs!==null){ bands.push([bs,r[0]]); bs=null; } });
+  if(bs!==null) bands.push([bs,t1]);
+  const shade=bands.map(([a,b])=>`<rect x="${x(a)}" y="${P.t}" width="${Math.max(2,x(b)-x(a))}" height="${H-P.t-P.b}" fill="var(--ok)" opacity=".13"/>`).join('');
+  const grid=[3500,3700,3900,4100].map(v=>`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text class="chart-axis" x="${P.l-4}" y="${y(v)+3}" text-anchor="end">${(v/1000).toFixed(1)}</text>`).join('');
+  const fmt=t=>new Date(t*1000).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit'});
+  box.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${grid}
+    ${shade}${lines}${events.filter(e=>e.t>=t0&&e.t<=t1&&e.type!=='note').map(e=>`<line x1="${x(e.t)}" x2="${x(e.t)}" y1="${P.t}" y2="${H-P.b}" stroke="var(--muted)" stroke-dasharray="3 3"><title>${EVN[e.type]}: ${esc(e.text)}</title></line><text class="chart-axis" x="${x(e.t)+2}" y="${P.t+8}">${e.type==='battery'?'🔋':e.type==='firmware'?'⚙':'✎'}</text>`).join('')}
+    <text class="chart-axis" x="${P.l}" y="${H-4}">${fmt(t0)}</text><text class="chart-axis" x="${W-P.r}" y="${H-4}" text-anchor="end">${fmt(t1)}</text></svg>`;
+}
+
+async function upload(files){
+  const list=[...files].filter(f=>f.type.startsWith('image/'));
+  if(!list.length) return;
+  const fit=document.querySelector('input[name=fit]:checked').value, dither=$('#dither').checked, show=$('#autoshow').checked;
+  for(const f of list){
+    const fd=new FormData(); fd.append('file',f,f.name||'pasted.png'); fd.append('fit',fit); fd.append('dither',dither); fd.append('show',show && f===list[list.length-1]);
+    try{ await api('/api/images',{method:'POST',body:fd}); toast(`'${f.name||'붙여넣은 이미지'}' 업로드됨`); }
+    catch(e){ toast('업로드 실패: '+e.message); }
+  }
+  await reloadAll();
+}
+
+const drop=$('#drop');
+drop.onclick=()=>$('#file').click();
+$('#file').onchange=e=>upload(e.target.files);
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>upload(e.dataTransfer.files));
+document.addEventListener('paste',e=>{ if(e.target.tagName==='INPUT') return; const fs=[...e.clipboardData.items].filter(i=>i.kind==='file').map(i=>i.getAsFile()); if(fs.length) upload(fs); });
+
+(async()=>{
+  await reloadAll(); await loadEvents().catch(()=>{}); loadDevice();
+  // 탭이 보일 때만 가볍게 확인: 상태 20초, 기기/배터리 60초
+  setInterval(()=>{ if(!document.hidden) loadState().catch(()=>{}); }, 20000);
+  setInterval(()=>{ if(!document.hidden) loadDevice().catch(()=>{}); }, 60000);
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ loadState().catch(()=>{}); loadDevice().catch(()=>{}); } });
+})();
+</script>
+</body>
+</html>

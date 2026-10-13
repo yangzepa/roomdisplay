@@ -1,0 +1,17 @@
+services:
+  roomdisplay:
+    build: .
+    container_name: roomdisplay
+    restart: unless-stopped
+    ports:
+      - "8070:8070"
+    environment:
+      TITLE: "${ROOM_TITLE:-연구실}"   # 글자 대체 화면 상단 제목. 실제 값은 같은 폴더 .env 에 ROOM_TITLE=...
+      TZ: Asia/Seoul
+      # 배터리/충전 추정 파라미터
+      # 현재 셀 기준. 교체 시점 등 이력은 data/events.json(웹 '기록 메모')에 남김
+      # CHARGE_MA 는 충전 중 USB 입력 약 1W(5V) 관찰값 기준 추정
+      BAT_MAH: "3500"
+      CHARGE_MA: "200"
+    volumes:
+      - ./data:/data
